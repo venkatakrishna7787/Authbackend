@@ -68,6 +68,10 @@ export const getProfile = async (userId: string) => {
     }
 }
 
+export const logoutUser = async (userId: string) => {
+    await updateUserById(userId, { $unset: { refreshToken: 1 } })
+}
+
 export const getNewTokens = async (refreshToken: string) => {
     let tokenData: ITokenPayload;
     try {

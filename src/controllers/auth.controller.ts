@@ -1,4 +1,4 @@
-import { getNewTokens, getProfile, loginUser, registerUser } from "../services/auth.services";
+import { getNewTokens, getProfile, loginUser, logoutUser, registerUser } from "../services/auth.services";
 import { NextFunction, Request, Response } from "express";
 import { TlogInData } from "../validators/auth.validator";
 
@@ -25,6 +25,18 @@ export async function profile(req: Request, res: Response, next: NextFunction) {
         const response = await getProfile(req.user.userId)
         res.status(200).json(response)
     } catch (err) {
+        next(err)
+    }
+}
+
+export async function logout(req: Request, res: Response, next: NextFunction) {
+    try {
+        await logoutUser(req.user.userId)
+        res.status(200).json({
+            message: "Logged out successfully"
+        })
+    } catch (err) {
+        console.log(err)
         next(err)
     }
 }
