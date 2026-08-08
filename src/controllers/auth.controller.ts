@@ -1,0 +1,40 @@
+import { getNewTokens, getProfile, loginUser, registerUser } from "../services/auth.services";
+import { NextFunction, Request, Response } from "express";
+import { TlogInData } from "../validators/auth.validator";
+
+export async function register(req: Request, res: Response, next: NextFunction) {
+    try {
+        await registerUser(req.body);
+        res.status(201).json({
+            msg: 'User successfully created'
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+export async function logIn(req: Request, res: Response, next: NextFunction) {
+    try {
+        const response = await loginUser(req.body as TlogInData)
+        res.status(200).json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+export async function profile(req: Request, res: Response, next: NextFunction) {
+    try {
+        const response = await getProfile(req.user.userId)
+        res.status(200).json(response)
+    } catch (err) {
+        next(err)
+    }
+}
+
+export async function refreshToken(req: Request, res: Response, next: NextFunction) {
+    try {
+        const response = await getNewTokens(req.body.refreshToken)
+        res.status(200).json(response)
+    } catch (err) {
+        console.log("errr", err)
+        next(err)
+    }
+}
