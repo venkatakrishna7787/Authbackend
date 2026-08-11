@@ -1,7 +1,7 @@
 import { UserResponseDto } from "../dtos/user.dtos";
-import { IModalUser } from "../model/user.model";
+import { IUserDocument } from "../models/user.model";
 
-export function mapUserToResponse(user: IModalUser): UserResponseDto {
+export function mapUserToResponse(user: IUserDocument): UserResponseDto {
     return {
         id: user._id.toString(),
         firstName: user.firstName,

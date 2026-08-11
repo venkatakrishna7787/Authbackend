@@ -50,8 +50,8 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 })
 
-const UserModal = mongoose.model("user", userSchema);
+const UserModel = mongoose.model("user", userSchema);
 
 
-export type IModalUser = HydratedDocument<InferSchemaType<typeof userSchema>>
-export default UserModal
+export type IUserDocument = HydratedDocument<InferSchemaType<typeof userSchema>>
+export default UserModel

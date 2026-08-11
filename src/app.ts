@@ -1,6 +1,6 @@
 
 import express from 'express'
-import authRouter from './routes/auth.routes';
+import authRouter from './modules/auth/auth.routes';
 import { errorHandler } from './middlewares/error.middleware';
 
 

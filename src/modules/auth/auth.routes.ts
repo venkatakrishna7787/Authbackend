@@ -1,8 +1,8 @@
 import express from 'express'
-import { changePassword, logIn, logout, profile, refreshToken, register } from "../controllers/auth.controller";
-import { changePasswordSchema, logInSchema, refreshTokenSchema, registerSchema } from '../validators/auth.validator';
-import { reqValidator } from '../middlewares/reqValidator.middleware';
-import { authorization } from '../middlewares/authorization.middleware';
+import { changePassword, logIn, logout, profile, refreshToken, register } from "./auth.controller";
+import { changePasswordSchema, logInSchema, refreshTokenSchema, registerSchema } from './auth.validator';
+import { reqValidator } from '../../middlewares/reqValidator.middleware';
+import { authorization } from '../../middlewares/authorization.middleware';
 
 const authRouter = express.Router()
 

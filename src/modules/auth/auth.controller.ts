@@ -1,6 +1,6 @@
-import { changeUserPassword, getNewTokens, getProfile, loginUser, logoutUser, registerUser } from "../services/auth.services";
+import { changeUserPassword, getNewTokens, getProfile, loginUser, logoutUser, registerUser } from "./auth.service";
 import { NextFunction, Request, Response } from "express";
-import { TlogInData } from "../validators/auth.validator";
+import { TlogInData } from "./auth.validator";
 
 export async function register(req: Request, res: Response, next: NextFunction) {
     try {

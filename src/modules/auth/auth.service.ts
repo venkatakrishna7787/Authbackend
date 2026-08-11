@@ -1,10 +1,10 @@
-import { ApiError } from "../config/apiError"
-import { mapUserToResponse } from "../mappers/user.mapper"
-import { IModalUser } from "../model/user.model"
-import { createUser, findUserByEmail, findUserById, updateUserById } from "../repositories/auth.repository"
-import { compareJWTToken, compareRefreshToken, generateAccessToken, generateRefreshToken, ITokenPayload } from "../utilities/jwtToken"
-import { comparePassword, compareRefreshTokenHash, hashPassword, hashRefreshToken } from "../utilities/passwordDecrypt"
-import { TChangePassword, TlogInData, TUser, UserDocument } from "../validators/auth.validator"
+import { ApiError } from "../../config/apiError"
+import { mapUserToResponse } from "../../mappers/user.mapper"
+import { IUserDocument } from "../../models/user.model"
+import { createUser, findUserByEmail, findUserById, updateUserById } from "./auth.repository"
+import { compareJWTToken, compareRefreshToken, generateAccessToken, generateRefreshToken, ITokenPayload } from "../../utilities/jwtToken"
+import { comparePassword, compareRefreshTokenHash, hashPassword, hashRefreshToken } from "../../utilities/passwordDecrypt"
+import { TChangePassword, TlogInData, TUser, UserDocument } from "./auth.validator"
 
 
 export const registerUser = async (userPayload: TUser) => {
@@ -79,7 +79,7 @@ export const getNewTokens = async (refreshToken: string) => {
     } catch (error) {
         throw new ApiError(401, "Invalid or expired refresh token");
     }
-    const userData = await findUserById(tokenData.userId, true) as IModalUser;
+    const userData = await findUserById(tokenData.userId, true) as IUserDocument;
 
     const isTokenActive = await compareRefreshTokenHash(refreshToken, userData.refreshToken || '')
     console.log('isTokenActive>>', isTokenActive)
@@ -114,7 +114,7 @@ export const changeUserPassword = async (userId: string, payload: TChangePasswor
             "New password must be different from current password"
         );
     }
-    const userData = await findUserById(userId, false, true) as IModalUser;
+    const userData = await findUserById(userId, false, true) as IUserDocument;
     if (!userData) throw new ApiError(400, "User not exist")
     const isOldPasswordVerfied = await comparePassword(payload.oldPassword, userData.password);
     if (!isOldPasswordVerfied) {

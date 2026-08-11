@@ -1,13 +1,13 @@
-import UserModal from "../model/user.model";
-import { TUser } from "../validators/auth.validator";
+import UserModel from "../../models/user.model";
+import { TUser } from "./auth.validator";
 
 
 
 export function createUser(payload: TUser) {
-    return UserModal.create(payload)
+    return UserModel.create(payload)
 }
 export function findUserByEmail(email: string, includePassword = false) {
-    const query = UserModal.findOne({ email });
+    const query = UserModel.findOne({ email });
 
     if (includePassword) {
         return query.select("+password")
@@ -16,7 +16,7 @@ export function findUserByEmail(email: string, includePassword = false) {
 }
 
 export function findUserById(id: String, includeRefreshToken = false, includePassword = false) {
-    const query = UserModal.findOne({ _id: id });
+    const query = UserModel.findOne({ _id: id });
     if (includeRefreshToken) {
         return query.select("+refreshToken")
     }
@@ -27,5 +27,5 @@ export function findUserById(id: String, includeRefreshToken = false, includePas
 }
 
 export function updateUserById(id: String, payload: any) {
-    return UserModal.updateOne({ _id: id }, payload);
+    return UserModel.updateOne({ _id: id }, payload);
 }
