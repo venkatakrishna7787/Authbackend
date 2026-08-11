@@ -1,5 +1,4 @@
 import { ApiError } from "../../config/apiError"
-import { mapUserToResponse } from "../../mappers/user.mapper"
 import { IUserDocument } from "../../models/user.model"
 import { createUser, findUserByEmail, findUserById, updateUserById } from "./auth.repository"
 import { compareJWTToken, compareRefreshToken, generateAccessToken, generateRefreshToken, ITokenPayload } from "../../utilities/jwtToken"
@@ -53,18 +52,6 @@ export const loginUser = async (logInPayload: TlogInData) => {
             accessToken,
             refreshToken,
         }
-    }
-}
-
-export const getProfile = async (userId: string) => {
-    const userData = await findUserById(userId);
-
-    if (!userData) {
-        throw new ApiError(404, "User is not Exist")
-    }
-    const mappedResponse = mapUserToResponse(userData)
-    return {
-        user: mappedResponse
     }
 }
 
