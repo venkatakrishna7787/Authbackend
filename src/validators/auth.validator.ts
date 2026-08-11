@@ -31,8 +31,16 @@ export const logInSchema = z.object({
 export const refreshTokenSchema = z.object({
     refreshToken: z.string({ error: "RefreshToken is required" }),
 }).strict()
+
+export const changePasswordSchema = z.object({
+    oldPassword: z.string({ error: "oldPassword is required" }).min(8, "Password should be minimum 8 characters"),
+    newPassword: z.string({ error: "newPassword is required" }).min(8, "Password should be minimum 8 characters").regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/, {
+        error: "password should contain atleast 1 Uppercase 1 Lowercase 1 Number 1 Special Character"
+    }),
+});
 export type TUser = z.infer<typeof registerSchema>
 export type TlogInData = z.infer<typeof logInSchema>
 export type TRefreshToken = z.infer<typeof refreshTokenSchema>
+export type TChangePassword = z.infer<typeof changePasswordSchema>
 
 export type UserDocument = HydratedDocument<TUser>;

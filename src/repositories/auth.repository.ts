@@ -15,10 +15,13 @@ export function findUserByEmail(email: string, includePassword = false) {
     return query
 }
 
-export function findUserById(id: String, includeRefreshToken = false) {
+export function findUserById(id: String, includeRefreshToken = false, includePassword = false) {
     const query = UserModal.findOne({ _id: id });
     if (includeRefreshToken) {
         return query.select("+refreshToken")
+    }
+    if (includePassword) {
+        return query.select("+password")
     }
     return query
 }

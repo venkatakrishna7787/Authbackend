@@ -1,4 +1,4 @@
-import { getNewTokens, getProfile, loginUser, logoutUser, registerUser } from "../services/auth.services";
+import { changeUserPassword, getNewTokens, getProfile, loginUser, logoutUser, registerUser } from "../services/auth.services";
 import { NextFunction, Request, Response } from "express";
 import { TlogInData } from "../validators/auth.validator";
 
@@ -50,3 +50,14 @@ export async function refreshToken(req: Request, res: Response, next: NextFuncti
         next(err)
     }
 }
+
+export async function changePassword(req: Request, res: Response, next: NextFunction) {
+    try {
+        const response = await changeUserPassword(req.user.userId, req.body)
+        res.status(200).json(response)
+    } catch (err) {
+        console.log("errr", err)
+        next(err)
+    }
+}
+

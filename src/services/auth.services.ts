@@ -4,7 +4,7 @@ import { IModalUser } from "../model/user.model"
 import { createUser, findUserByEmail, findUserById, updateUserById } from "../repositories/auth.repository"
 import { compareJWTToken, compareRefreshToken, generateAccessToken, generateRefreshToken, ITokenPayload } from "../utilities/jwtToken"
 import { comparePassword, compareRefreshTokenHash, hashPassword, hashRefreshToken } from "../utilities/passwordDecrypt"
-import { TlogInData, TUser, UserDocument } from "../validators/auth.validator"
+import { TChangePassword, TlogInData, TUser, UserDocument } from "../validators/auth.validator"
 
 
 export const registerUser = async (userPayload: TUser) => {
@@ -103,5 +103,45 @@ export const getNewTokens = async (refreshToken: string) => {
     return {
         accessToken: newAccessToken,
         refreshToken: newRefreshToken
+    }
+}
+
+export const changeUserPassword = async (userId: string, payload: TChangePassword) => {
+
+    if (payload.oldPassword === payload.newPassword) {
+        throw new ApiError(
+            400,
+            "New password must be different from current password"
+        );
+    }
+    const userData = await findUserById(userId, false, true) as IModalUser;
+    if (!userData) throw new ApiError(400, "User not exist")
+    const isOldPasswordVerfied = await comparePassword(payload.oldPassword, userData.password);
+    if (!isOldPasswordVerfied) {
+        throw new ApiError(401, "Old password is not matching");
+    }
+
+    const hashedNewPassword = await hashPassword(payload.newPassword);
+    const tokenPayload: ITokenPayload = {
+        userId: userData._id,
+        email: userData.email,
+    }
+
+
+    const newRefreshToken = generateRefreshToken(tokenPayload);
+    const hashedRefreshToken = await hashRefreshToken(newRefreshToken);
+    const result = await updateUserById(userId, {
+        $set: {
+            password: hashedNewPassword,
+            refreshToken: hashedRefreshToken
+        }
+    })
+
+    if (result.modifiedCount !== 1) {
+        throw new ApiError(500, "Failed to update password");
+    }
+
+    return {
+        msg: "Password is updated successfully"
     }
 }

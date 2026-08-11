@@ -1,6 +1,6 @@
 import express from 'express'
-import { logIn, logout, profile, refreshToken, register } from "../controllers/auth.controller";
-import { logInSchema, refreshTokenSchema, registerSchema } from '../validators/auth.validator';
+import { changePassword, logIn, logout, profile, refreshToken, register } from "../controllers/auth.controller";
+import { changePasswordSchema, logInSchema, refreshTokenSchema, registerSchema } from '../validators/auth.validator';
 import { reqValidator } from '../middlewares/reqValidator.middleware';
 import { authorization } from '../middlewares/authorization.middleware';
 
@@ -11,5 +11,6 @@ authRouter.post("/login", reqValidator(logInSchema), logIn)
 authRouter.get("/profile", authorization, profile)
 authRouter.post("/logout", authorization, logout)
 authRouter.post("/refreshToken", reqValidator(refreshTokenSchema), refreshToken)
+authRouter.post("/changePassword", authorization, reqValidator(changePasswordSchema), changePassword)
 
 export default authRouter
